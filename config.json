@@ -1,0 +1,151 @@
+{
+  "fields": [
+    { "name": "Risk Status", "type": "dropdown", "values": ["Draft", "Open", "Closed"] },
+    { "name": "ID", "type": "text" },
+    { "name": "Source", "type": "text" },
+    { "name": "RBS", "type": "dropdown", "values": ["Customers/Stakeholders", "Business/Government", "Management Controls & Systems", "Financial", "Commercial & Legal", "Environment & Sustainability", "Safety & Security", "Planning", "Design", "Procurement", "Construction", "O&M"] },
+    { "name": "Title: Description", "type": "textarea" },
+    { "name": "Threat / Opportunity", "type": "dropdown", "values": ["Threat", "Opportunity"] },
+    { "name": "Causes", "type": "tags" },
+    { "name": "Consequences", "type": "text" },
+    { "name": "Existing Controls", "type": "tags" },
+    { "name": "Control effectiveness", "type": "dropdown", "values": ["High", "Good", "Effective", "Moderate", "Partially Effective", "Ineffective"] },
+    { "name": "Leading Consequence Category", "type": "dropdown", "values": ["Cost", "Time", "Health & Safety", "Quality", "Environmental", "Legal", "Social"] },
+    { "name": "Other Relevent Consequence Category", "type": "dropdown", "values": ["Cost", "Time", "Health & Safety", "Quality", "Environmental", "Legal", "Social"] },
+    { "name": "Max Conseq level", "type": "text" },
+    { "name": "Likelihood level", "type": "dropdown", "values": ["Rare (<0.4%)", "Very Unlikely (0.4%-2%)", "Unlikely (2%-10%)", "Possible (10%-50%)", "Likely (50%-90%)", "Very Likely (>90%)"] },
+    { "name": "Risk rating", "type": "text" },
+    { "name": "Risk Owner", "type": "text" },
+    { "name": "Decision", "type": "dropdown", "values": ["Within Tolerance (Monitor/ Accept)", "Treat", "Transfer"] },
+    { "name": "Comments", "type": "textarea" },
+    { "name": "Treatment Actions", "type": "textarea" }
+  ],
+  "impactMatrix": {
+    "Cost": {
+      "Opportunity": [
+        { "ID": "ICO6", "Impact Level": "Exceptional", "Value": 6, "Definition": "Greater than $50M decrease in Cost" },
+        { "ID": "ICO5", "Impact Level": "Major", "Value": 5, "Definition": "Between $25M - $50M decrease in Cost" },
+        { "ID": "ICO4", "Impact Level": "Significant", "Value": 4, "Definition": "Between $2M - $25M decrease in Cost" },
+        { "ID": "ICO3", "Impact Level": "Moderate", "Value": 3, "Definition": "Between $500k - $2M decrease in Cost" },
+        { "ID": "ICO2", "Impact Level": "Minor", "Value": 2, "Definition": "Between $200k - $500k decrease in Cost" },
+        { "ID": "ICO1", "Impact Level": "Minimal", "Value": 1, "Definition": "Less than $200k decrease in Cost" }
+      ],
+      "Threat": [
+        { "ID": "ICT1", "Impact Level": "Minimal", "Value": 1, "Definition": "Less than $200k increase in Cost" },
+        { "ID": "ICT2", "Impact Level": "Minor", "Value": 2, "Definition": "Between $200k - $500k increase in Cost" },
+        { "ID": "ICT3", "Impact Level": "Moderate", "Value": 3, "Definition": "Between $500k - $2M increase in Cost" },
+        { "ID": "ICT4", "Impact Level": "Major", "Value": 4, "Definition": "Between $2M - $25M increase in Cost" },
+        { "ID": "ICT5", "Impact Level": "Critical", "Value": 5, "Definition": "Between $25M - $50M increase in Cost" },
+        { "ID": "ICT6", "Impact Level": "Extreme", "Value": 6, "Definition": "Greater than $50M increase in Cost" }
+      ]
+    },
+    "Time": {
+      "Opportunity": [
+        { "ID": "ITO6", "Impact Level": "Exceptional", "Value": 6, "Definition": "Impact on critical path. More than 12 weeks Program activities advanced" },
+        { "ID": "ITO5", "Impact Level": "Major", "Value": 5, "Definition": "Impact on critical path. More than 12 weeks Program activities advanced" },
+        { "ID": "ITO4", "Impact Level": "Significant", "Value": 4, "Definition": "Potential impact on critical path. 8 to 12 weeks Program activities advanced" },
+        { "ID": "ITO3", "Impact Level": "Moderate", "Value": 3, "Definition": "4 to 8 weeks Program activities advanced" },
+        { "ID": "ITO2", "Impact Level": "Minor", "Value": 2, "Definition": "1 to 4 weeks Program activities advanced" },
+        { "ID": "ITO1", "Impact Level": "Minimal", "Value": 1, "Definition": "Less than 1 week Program activities advanced" }
+      ],
+      "Threat": [
+        { "ID": "ITT1", "Impact Level": "Minimal", "Value": 1, "Definition": "Less than 1 week impact." },
+        { "ID": "ITT2", "Impact Level": "Minor", "Value": 2, "Definition": "Between 1 to 4 weeks impact" },
+        { "ID": "ITT3", "Impact Level": "Moderate", "Value": 3, "Definition": "Program exceeded by 4 to 8 weeks" },
+        { "ID": "ITT4", "Impact Level": "Major", "Value": 4, "Definition": "Potential impact on critical path Program exceeded by 8 to 12 weeks" },
+        { "ID": "ITT5", "Impact Level": "Critical", "Value": 5, "Definition": "Impact on critical path. Program exceeded by more than 12 weeks (+) delay or stoppage impact" },
+        { "ID": "ITT6", "Impact Level": "Extreme", "Value": 6, "Definition": "Impact on critical path. Program exceeded by more than 12 weeks (+) delay or stoppage impact" }
+      ]
+    },
+    "Health & Safety": {
+      "Opportunity": [
+        { "ID": "IHO6", "Impact Level": "Exceptional", "Value": 6, "Definition": "Incidents virtually removed and no injuries occur" },
+        { "ID": "IHO5", "Impact Level": "Major", "Value": 5, "Definition": "Incidents virtually removed and no injuries occur" },
+        { "ID": "IHO4", "Impact Level": "Significant", "Value": 4, "Definition": "Only minor incidents with no serious medical treatment required" },
+        { "ID": "IHO3", "Impact Level": "Moderate", "Value": 3, "Definition": "First aid injuries only - no medical treatment or hospitalization" },
+        { "ID": "IHO2", "Impact Level": "Minor", "Value": 2, "Definition": "Dramatic reduction in time loss and first aid treatment" },
+        { "ID": "IHO1", "Impact Level": "Minimal", "Value": 1, "Definition": "Less than 5 injuries requiring any medical treatment" }
+      ],
+      "Threat": [
+        { "ID": "IHT1", "Impact Level": "Minimal", "Value": 1, "Definition": "Illness, first aid or injury not requiring medical treatment" },
+        { "ID": "IHT2", "Impact Level": "Minor", "Value": 2, "Definition": "Illness or minor injuries requiring medical treatment" },
+        { "ID": "IHT3", "Impact Level": "Moderate", "Value": 3, "Definition": "Injury requiring inpatient or outpatient care, resulting in loss of one or more days work or hospitalisation" },
+        { "ID": "IHT4", "Impact Level": "Major", "Value": 4, "Definition": "Injuries resulting in: lost time, permanent disability, amputation, or surgery" },
+        { "ID": "IHT5", "Impact Level": "Critical", "Value": 5, "Definition": "Single or multiple fatalities, and/or significant number of serious injuries" },
+        { "ID": "IHT6", "Impact Level": "Extreme", "Value": 6, "Definition": "Single or multiple fatalities, and/or significant number of serious injuries" }
+      ]
+    },
+    "Quality": {
+      "Opportunity": [
+        { "ID": "IQO6", "Impact Level": "Exceptional", "Value": 6, "Definition": "Exceptional improvements to quality. Exceptional works / scope improvements." },
+        { "ID": "IQO5", "Impact Level": "Major", "Value": 5, "Definition": "Exceptional improvements to quality. Exceptional works / scope improvements." },
+        { "ID": "IQO4", "Impact Level": "Significant", "Value": 4, "Definition": "Major improvements to quality. Major works / scope improvements." },
+        { "ID": "IQO3", "Impact Level": "Moderate", "Value": 3, "Definition": "Significant improvements to quality. Significant work / scope improvements." },
+        { "ID": "IQO2", "Impact Level": "Minor", "Value": 2, "Definition": "Noticeable improvements to quality. Minor work / scope improvements." },
+        { "ID": "IQO1", "Impact Level": "Minimal", "Value": 1, "Definition": "Negligible improvements to quality. Barely noticeable impact." }
+      ],
+      "Threat": [
+        { "ID": "IQT1", "Impact Level": "Minimal", "Value": 1, "Definition": "Quality is meeting the requirements at an acceptable level. Barely noticeable impact." },
+        { "ID": "IQT2", "Impact Level": "Minor", "Value": 2, "Definition": "Quality is not meeting the requirements but can be easily recovered. Minor works / scope deviation or reduction." },
+        { "ID": "IQT3", "Impact Level": "Moderate", "Value": 3, "Definition": "Quality is not meeting the requirements but can be reworked and or recovered to acceptable quality requirements. Considerable works / scope deviation or reduction." },
+        { "ID": "IQT4", "Impact Level": "Major", "Value": 4, "Definition": "Quality is not meeting the requirements or standards but can be reworked and/or recovered to acceptable level of degradation. Major works / scope deviation or reduction." },
+        { "ID": "IQT5", "Impact Level": "Critical", "Value": 5, "Definition": "Quality is not meeting the requirements and standards and must be reworked and or replaced. Unacceptable impacts with no possibility of exception. Project work or element does not meet need and purpose." },
+        { "ID": "IQT6", "Impact Level": "Extreme", "Value": 6, "Definition": "Quality is not meeting the requirements and standards and must be reworked and or replaced. Unacceptable impacts with no possibility of exception. Project work or element does not meet need and purpose." }
+      ]
+    },
+    "Environmental": {
+      "Opportunity": [
+        { "ID": "IEO6", "Impact Level": "Exceptional", "Value": 6, "Definition": "Major long-term enhancements to the natural and social environments, preservation of biological diversity, or preservation of the present and future historical, archaeological and natural heritage. The potential significance of the outcomes are of national to international importance" },
+        { "ID": "IEO5", "Impact Level": "Major", "Value": 5, "Definition": "Major long-term enhancements to the natural and social environments, preservation of biological diversity, or preservation of the present and future historical, archaeological and natural heritage. The potential significance of the outcomes are of national to international importance" },
+        { "ID": "IEO4", "Impact Level": "Significant", "Value": 4, "Definition": "Major environmental enhancement or preservation initiatives of medium to long term duration. The potential environmental significance of the outcomes are of regional to national importance" },
+        { "ID": "IEO3", "Impact Level": "Moderate", "Value": 3, "Definition": "Moderate environmental enhancements or preservation. The potential environmental significance of the outcomes are of local to regional importance" },
+        { "ID": "IEO2", "Impact Level": "Minor", "Value": 2, "Definition": "Minor area specific to localized environmental enhancements or preservation (short term). The potential environmental significance of the outcomes are of area specific to local importance" },
+        { "ID": "IEO1", "Impact Level": "Minimal", "Value": 1, "Definition": "Slight, localized and temporary enhancements to the environment" }
+      ],
+      "Threat": [
+        { "ID": "IET1", "Impact Level": "Minimal", "Value": 1, "Definition": "Minor localized environmental harm rectified within hours" },
+        { "ID": "IET2", "Impact Level": "Minor", "Value": 2, "Definition": "Minor transient environmental harm that requires days for recovery" },
+        { "ID": "IET3", "Impact Level": "Moderate", "Value": 3, "Definition": "Significant environmental harm that requires weeks for recovery" },
+        { "ID": "IET4", "Impact Level": "Major", "Value": 4, "Definition": "Very serious long-term environmental harm or contamination that takes years to recover" },
+        { "ID": "IET5", "Impact Level": "Critical", "Value": 5, "Definition": "Severe environmental harm or contamination resulting in permanent environmental damage" },
+        { "ID": "IET6", "Impact Level": "Extreme", "Value": 6, "Definition": "Severe environmental harm or contamination resulting in permanent environmental damage" }
+      ]
+    },
+    "Legal": {
+      "Opportunity": [
+        { "ID": "ILO6", "Impact Level": "Exceptional", "Value": 6, "Definition": "-" },
+        { "ID": "ILO5", "Impact Level": "Major", "Value": 5, "Definition": "-" },
+        { "ID": "ILO4", "Impact Level": "Significant", "Value": 4, "Definition": "-" },
+        { "ID": "ILO3", "Impact Level": "Moderate", "Value": 3, "Definition": "-" },
+        { "ID": "ILO2", "Impact Level": "Minor", "Value": 2, "Definition": "-" },
+        { "ID": "ILO1", "Impact Level": "Minimal", "Value": 1, "Definition": "-" }
+      ],
+      "Threat": [
+        { "ID": "ILT1", "Impact Level": "Minimal", "Value": 1, "Definition": "Minor breaches of regulations" },
+        { "ID": "ILT2", "Impact Level": "Minor", "Value": 2, "Definition": "Minor legal issues and non compliance" },
+        { "ID": "ILT3", "Impact Level": "Moderate", "Value": 3, "Definition": "Serious breach of regulations with investigation and report to authorities, fine possible" },
+        { "ID": "ILT4", "Impact Level": "Major", "Value": 4, "Definition": "Major breach of regulation and major litigation" },
+        { "ID": "ILT5", "Impact Level": "Critical", "Value": 5, "Definition": "Significant prosecution and fines. Serious litigation. Class actions" },
+        { "ID": "ILT6", "Impact Level": "Extreme", "Value": 6, "Definition": "Significant prosecution and fines. Serious litigation. Class actions" }
+      ]
+    },
+    "Social": {
+      "Opportunity": [
+        { "ID": "ISO6", "Impact Level": "Exceptional", "Value": 6, "Definition": "Recognized internationally for best practice community participation and stewardship function" },
+        { "ID": "ISO5", "Impact Level": "Major", "Value": 5, "Definition": "Recognized internationally for best practice community participation and stewardship function" },
+        { "ID": "ISO4", "Impact Level": "Significant", "Value": 4, "Definition": "Federal government recognition of community initiative" },
+        { "ID": "ISO3", "Impact Level": "Moderate", "Value": 3, "Definition": "Award / recognition for sponsorship of community program / initiative" },
+        { "ID": "ISO2", "Impact Level": "Minor", "Value": 2, "Definition": "Local media coverage of community initiatives" },
+        { "ID": "ISO1", "Impact Level": "Minimal", "Value": 1, "Definition": "Recognized for support in local community or support of the specific group in the local community" }
+      ],
+      "Threat": [
+        { "ID": "IST1", "Impact Level": "Minimal", "Value": 1, "Definition": "Minor adverse local public or media attention or complaints" },
+        { "ID": "IST2", "Impact Level": "Minor", "Value": 2, "Definition": "Media attention and heightened concern by local community. State Government scrutiny" },
+        { "ID": "IST3", "Impact Level": "Moderate", "Value": 3, "Definition": "Significant adverse State Media or public attention. Federal Government scrutiny" },
+        { "ID": "IST4", "Impact Level": "Major", "Value": 4, "Definition": "Serious public and national media outcry" },
+        { "ID": "IST5", "Impact Level": "Critical", "Value": 5, "Definition": "International outrage" },
+        { "ID": "IST6", "Impact Level": "Extreme", "Value": 6, "Definition": "International outrage" }
+      ]
+    }
+  }
+}
