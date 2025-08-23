@@ -2,15 +2,16 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const log = require('electron-log');
-const appPaths = require('./src/main/paths');
+const { getPaths } = require('./src/main/paths');
+const { registerIpcHandlers } = require('./src/main/ipc');
 
-function bootstrap() {
+function bootstrap(paths) {
   // Configure logging
-  log.transports.file.resolvePath = () => appPaths.logFile;
+  log.transports.file.resolvePath = () => paths.logFile;
   log.info('App starting...');
 
   // Create directory structure
-  [appPaths.dataDir, appPaths.inboxDir, appPaths.processedDir, appPaths.logsDir].forEach(dir => {
+  [paths.dataDir, paths.inboxDir, paths.processedDir, paths.logsDir].forEach(dir => {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
       log.info(`Created directory: ${dir}`);
@@ -18,18 +19,18 @@ function bootstrap() {
   });
 
   // Bootstrap config.json
-  if (!fs.existsSync(appPaths.configPath)) {
+  if (!fs.existsSync(paths.configPath)) {
     const defaultConfigPath = path.join(app.getAppPath(), 'config.json');
-    fs.copyFileSync(defaultConfigPath, appPaths.configPath);
-    log.info(`Copied default config.json to ${appPaths.configPath}`);
+    fs.copyFileSync(defaultConfigPath, paths.configPath);
+    log.info(`Copied default config.json to ${paths.configPath}`);
   }
 
   // Bootstrap risk_register.csv
-  if (!fs.existsSync(appPaths.csvPath)) {
-    const configData = JSON.parse(fs.readFileSync(appPaths.configPath, 'utf8'));
+  if (!fs.existsSync(paths.csvPath)) {
+    const configData = JSON.parse(fs.readFileSync(paths.configPath, 'utf8'));
     const headers = configData.fields.map(field => field.name).join(',');
-    fs.writeFileSync(appPaths.csvPath, headers);
-    log.info(`Created risk_register.csv with headers at ${appPaths.csvPath}`);
+    fs.writeFileSync(paths.csvPath, headers);
+    log.info(`Created risk_register.csv with headers at ${paths.csvPath}`);
   }
 }
 
@@ -51,25 +52,11 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  bootstrap();
+  const paths = getPaths(app);
+  bootstrap(paths);
 
-  // IPC handler to get config
-  ipcMain.handle('get-config', async () => {
-    const data = fs.readFileSync(appPaths.configPath, 'utf8');
-    return JSON.parse(data);
-  });
-
-  // IPC handler to get risk data
-  ipcMain.handle('get-risks', async () => {
-    const data = fs.readFileSync(appPaths.csvPath, 'utf8');
-    return data;
-  });
-
-  // IPC handler to list files in the inbox
-  ipcMain.handle('list-inbox', async () => {
-    const files = fs.readdirSync(appPaths.inboxDir);
-    return files;
-  });
+  // Register all IPC handlers
+  registerIpcHandlers(ipcMain, paths);
 
   createWindow();
 

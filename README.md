@@ -31,13 +31,15 @@ npm install
 npm start
 ```
 
-### First-Run Behavior
+### First-Run Behavior / Architecture
 
 On first launch, the app will generate the following files and folders in the user's local app data directory (`<userData>/ai-risk-register`) if they are missing:
 
 * `risk_register.csv` → CSV with headers from `config.json`.
 * `config.json` → Defines fields, dropdowns, and impact matrices.
 * Folders → `inbox/`, `processed/`, and `logs/` (for document intake and tracking).
+
+Runtime paths are resolved from Electron's `userData` directory and are initialized only after the `app.ready` event to ensure testability and predictable behavior.
 
 ### Data Storage
 
@@ -104,15 +106,20 @@ To use AI-powered risk identification:
 
 ## Testing
 
-Currently manual testing is supported:
+The application includes automated tests for the core IPC and path handling logic.
+
+To run the tests:
+```bash
+npm test
+```
+
+Manual testing is also recommended:
 
 1. Run the app → `npm start`.
 2. Test CRUD operations: add, edit, delete risks.
 3. Confirm changes in `risk_register.csv`.
 4. Place a document in `inbox/` and test AI processing.
 5. Check that settings reflect `config.json`.
-
-Planned: automated tests for CSV parsing, data validation, and AI ingestion.
 
 ## Roadmap (Next Steps)
 

@@ -20,15 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Create table body
             const tbody = table.createTBody();
-            const rows = riskData.trim().split('\n');
-            const dataRows = rows.slice(1); // Skip header row
+            const headers = config.fields.map(field => field.name);
 
-            dataRows.forEach(rowData => {
+            riskData.forEach(risk => {
                 const row = tbody.insertRow();
-                const cells = rowData.split(',');
-                cells.forEach(cellData => {
+                headers.forEach(header => {
                     const cell = row.insertCell();
-                    cell.textContent = cellData.replace(/"/g, ''); // Clean up quotes
+                    cell.textContent = risk[header] || '';
                 });
             });
 

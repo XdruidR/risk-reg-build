@@ -6,6 +6,8 @@ const appPaths = require('./src/main/paths');
 contextBridge.exposeInMainWorld('electronAPI', {
   getConfig: () => ipcRenderer.invoke('get-config'),
   getRisks: () => ipcRenderer.invoke('get-risks'),
+  addRisk: (riskObj) => ipcRenderer.invoke('add-risk', riskObj),
+  updateRisk: (id, updates) => ipcRenderer.invoke('update-risk', { id, updates }),
   listInbox: () => ipcRenderer.invoke('list-inbox')
 });
 
