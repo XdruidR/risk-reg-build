@@ -33,7 +33,7 @@ npm start
 
 ### First-Run Behavior
 
-On first launch, the app will generate defaults if missing:
+On first launch, the app will generate the following files and folders in the user's local app data directory (`<userData>/ai-risk-register`) if they are missing:
 
 * `risk_register.csv` → CSV with headers from `config.json`.
 * `config.json` → Defines fields, dropdowns, and impact matrices.
