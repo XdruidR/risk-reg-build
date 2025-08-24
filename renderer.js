@@ -98,38 +98,36 @@ const loadSettings = () => {
 };
 
 
-// Main DOMContentLoaded listener
-document.addEventListener('DOMContentLoaded', () => {
-  const mainContent = document.getElementById('main-content');
-  const byId = id => document.getElementById(id);
+// Main script execution
+const mainContent = document.getElementById('main-content');
+const byId = id => document.getElementById(id);
 
-  // Check for API availability
-  if (!window.api) {
-    console.error('Preload API missing. Check preload logs.');
-    // show a toast/banner instead of crashing
-  }
+// Check for API availability
+if (!window.api) {
+  console.error('Preload API missing. Check preload logs.');
+  // show a toast/banner instead of crashing
+}
 
-  // Default view on launch
-  loadRiskRegister();
-  byId('nav-risk-register')?.classList.add('active'); // Set initial active state
+// Default view on launch
+loadRiskRegister();
+byId('nav-risk-register')?.classList.add('active'); // Set initial active state
 
-  // Wire up sidebar navigation
-  const navLinks = {
-    'nav-risk-register': loadRiskRegister,
-    'nav-ai-processor': loadAiProcessor,
-    'nav-settings': loadSettings
-  };
+// Wire up sidebar navigation
+const navLinks = {
+  'nav-risk-register': loadRiskRegister,
+  'nav-ai-processor': loadAiProcessor,
+  'nav-settings': loadSettings
+};
 
-  document.querySelector('.nav-panel').addEventListener('click', (event) => {
-    if (event.target.tagName === 'A') {
-      const navId = event.target.id;
-      if (navLinks[navId]) {
-        navLinks[navId]();
+document.querySelector('.nav-panel').addEventListener('click', (event) => {
+  if (event.target.tagName === 'A') {
+    const navId = event.target.id;
+    if (navLinks[navId]) {
+      navLinks[navId]();
 
-        // Active link styling
-        document.querySelectorAll('.nav-panel nav ul li a').forEach(link => link.classList.remove('active'));
-        event.target.classList.add('active');
-      }
+      // Active link styling
+      document.querySelectorAll('.nav-panel nav ul li a').forEach(link => link.classList.remove('active'));
+      event.target.classList.add('active');
     }
-  });
+  }
 });
