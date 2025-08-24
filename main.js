@@ -1,72 +1,62 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const log = require('electron-log');
+const { parse } = require('csv-parse/sync');
+const { stringify } = require('csv-stringify/sync');
 const { getPaths } = require('./src/main/paths');
-const { registerIpcHandlers } = require('./src/main/ipc');
 
-function bootstrap(paths) {
-  // Configure logging
-  log.transports.file.resolvePath = () => paths.logFile;
-  log.info('App starting...');
+let paths;
 
-  // Create directory structure
-  [paths.dataDir, paths.inboxDir, paths.processedDir, paths.logsDir].forEach(dir => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-      log.info(`Created directory: ${dir}`);
-    }
+function bootstrap(p) {
+  [p.dataDir, p.inboxDir, p.processedDir, p.logsDir].forEach(d => {
+    if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
   });
-
-  // Bootstrap config.json
-  if (!fs.existsSync(paths.configPath)) {
-    const defaultConfigPath = path.join(app.getAppPath(), 'config.json');
-    fs.copyFileSync(defaultConfigPath, paths.configPath);
-    log.info(`Copied default config.json to ${paths.configPath}`);
+  if (!fs.existsSync(p.configPath)) {
+    const defaultCfg = require('./config.json');
+    fs.writeFileSync(p.configPath, JSON.stringify(defaultCfg, null, 2), 'utf8');
   }
-
-  // Bootstrap risk_register.csv
-  if (!fs.existsSync(paths.csvPath)) {
-    const configData = JSON.parse(fs.readFileSync(paths.configPath, 'utf8'));
-    const headers = configData.fields.map(field => field.name).join(',');
-    fs.writeFileSync(paths.csvPath, headers);
-    log.info(`Created risk_register.csv with headers at ${paths.csvPath}`);
+  if (!fs.existsSync(p.csvPath)) {
+    const cfg = JSON.parse(fs.readFileSync(p.configPath, 'utf8'));
+    const header = cfg.fields.map(f => f.name);
+    fs.writeFileSync(p.csvPath, header.join(',') + '\n', 'utf8');
   }
+}
+
+function registerIpc(p) {
+  ipcMain.handle('get-app-paths', () => p);
+  ipcMain.handle('get-config', () => JSON.parse(fs.readFileSync(p.configPath, 'utf8')));
+  ipcMain.handle('get-risks', () => {
+    const data = fs.readFileSync(p.csvPath, 'utf8');
+    return parse(data, { columns: true, relax_quotes: true });
+  });
+  ipcMain.handle('list-inbox', () => fs.readdirSync(p.inboxDir).filter(f => !f.startsWith('.')));
 }
 
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  const preloadPath = path.join(__dirname, 'preload.js');
+  console.log('[main] preload at', preloadPath, 'exists?', fs.existsSync(preloadPath));
+
+  const win = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: preloadPath,
       contextIsolation: true,
-      nodeIntegration: false
-    }
+      nodeIntegration: false,
+      sandbox: false, // keep false so preload can require()
+    },
   });
 
-  mainWindow.loadFile('index.html');
+  win.webContents.on('did-finish-load', () => {
+    win.webContents.executeJavaScript('console.log("[page] has api?", typeof window.api)').catch(console.error);
+  });
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  win.loadFile('index.html');
 }
 
 app.whenReady().then(() => {
-  const paths = getPaths(app);
+  paths = getPaths();
   bootstrap(paths);
-
-  // Register all IPC handlers
-  registerIpcHandlers(ipcMain, paths);
-
+  registerIpc(paths);
   createWindow();
-
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
-});
-
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
 });

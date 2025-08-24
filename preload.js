@@ -1,21 +1,16 @@
-const { contextBridge, ipcRenderer } = require('electron');
-const appPaths = require('./src/main/paths');
+// preload.js
+console.log('[preload] starting');
+try {
+  const { contextBridge, ipcRenderer } = require('electron');
 
-// Expose protected methods that allow the renderer process to use
-// the ipcRenderer without exposing the entire object
-contextBridge.exposeInMainWorld('electronAPI', {
-  getConfig: () => ipcRenderer.invoke('get-config'),
-  getRisks: () => ipcRenderer.invoke('get-risks'),
-  addRisk: (riskObj) => ipcRenderer.invoke('add-risk', riskObj),
-  updateRisk: (id, updates) => ipcRenderer.invoke('update-risk', { id, updates }),
-  listInbox: () => ipcRenderer.invoke('list-inbox')
-});
+  contextBridge.exposeInMainWorld('api', {
+    appPaths: () => ipcRenderer.invoke('get-app-paths'),
+    getConfig: () => ipcRenderer.invoke('get-config'),
+    getRisks: () => ipcRenderer.invoke('get-risks'),
+    listInbox: () => ipcRenderer.invoke('list-inbox'),
+  });
 
-contextBridge.exposeInMainWorld('appPaths', {
-  get: () => ({
-    dataDir: appPaths.dataDir,
-    inboxDir: appPaths.inboxDir,
-    processedDir: appPaths.processedDir,
-    logsDir: appPaths.logsDir
-  })
-});
+  console.log('[preload] api exposed');
+} catch (e) {
+  console.error('[preload] error', e);
+}
