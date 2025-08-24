@@ -1,59 +1,131 @@
 # AI-Powered Risk Register Application
 
-This is a standalone desktop application built with Electron to streamline the creation and management of a project risk register. It is designed to replace manual, spreadsheet-based workflows by providing a user-friendly interface and leveraging AI to process unstructured documents.
+## Overview
 
----
+This is a standalone desktop application built with **Electron** to streamline the creation and management of a project risk register. It replaces manual, spreadsheet-based workflows with a user-friendly interface and leverages AI to process unstructured documents into structured risk data.
 
-## How to Run the Application
+**Key Goals:**
 
-1.  **Navigate to the `APP` directory** in your terminal.
-2.  **Install dependencies:** If you haven't already, run the following command. This only needs to be done once.
-    ```bash
-    npm install
-    ```
-3.  **Start the application:**
-    ```bash
-    npm start
-    ```
+* **Automated Risk Identification** – Use LLM APIs (Gemini, OpenAI, Anthropic, etc.) to parse documents and suggest risks or opportunities.
+* **Simplified Data Entry** – Provide a clean UI for adding, editing, and reviewing risks.
+* **Centralized Local Data** – Store configuration and data in simple, human-readable files (`config.json` and `risk_register.csv`).
 
----
+## Getting Started
 
-## Current Status
+### Prerequisites
 
-The application is in a foundational stage. The following features have been successfully implemented:
+* [Node.js](https://nodejs.org/) (LTS recommended)
+* [npm](https://www.npmjs.com/)
 
--   **Electron Shell:** The basic application window and process management are in place.
--   **UI Structure:** A two-panel layout with navigation for "Risk Register," "AI Document Processor," and "Settings."
--   **Data Persistence:**
-    -   `config.json`: Stores the schema for the risk register, including all fields, dropdowns, and the impact matrix.
-    -   `risk_register.csv`: Stores the actual risk data.
--   **Risk Register View:** The application successfully reads the config and CSV files on launch and dynamically renders the risk register in a styled table.
--   **Workflow Directory Structure:** `inbox` and `processed` folders have been created to manage the document processing flow.
--   **AI Processor UI:** The UI for the AI processor is set up and correctly lists files found in the `inbox` directory.
+### Installation & Launch
 
----
+```bash
+# Clone the repository
+git clone <repo-url>
+cd ai-risk-register
 
-## Next Steps for Development
+# Install dependencies
+npm install
 
-To complete the core functionality, the following features need to be implemented:
+# Start the app
+npm start
+```
 
-1.  **Implement CRUD Operations for Risks:**
-    -   **Create:** Add a form (modal or dedicated view) to add new risks to the `risk_register.csv`.
-    -   **Update:** Allow inline editing or a form to modify existing risks.
-    -   **Delete:** Add functionality to remove risks from the register.
-    *All operations must write back to the `risk_register.csv` file immediately.*
+### First-Run Behavior / Architecture
 
-2.  **Build the Settings Page:**
-    -   Create the UI for the "Settings" page to allow dynamic management of the `config.json` file.
-    -   Implement logic to add/remove/reorder fields and manage dropdown options.
+On first launch, the app will generate the following files and folders in the user's local app data directory (`<userData>/ai-risk-register`) if they are missing:
 
-3.  **Implement the AI Processing Logic:**
-    -   Add an interface on the "AI Document Processor" page for the user to enter their LLM API key (e.g., for Gemini or OpenAI).
-    -   When a file from the "Inbox" is selected and a "Process" button is clicked, the application should:
-        a. Read the content of the selected file.
-        b. Send the content to the chosen LLM API with a carefully crafted prompt to extract risks.
-        c. Receive the structured JSON response from the API.
-        d. Display the suggested risks in the "Suggested Risks" panel for user review.
-        e. Provide "Import" buttons to add a suggested risk to the main `risk_register.csv`.
-        f. Move the processed file from the `inbox` to the `processed` folder.
-        g. Log the operation in the "Processing Log" panel.
+* `risk_register.csv` → CSV with headers from `config.json`.
+* `config.json` → Defines fields, dropdowns, and impact matrices.
+* Folders → `inbox/`, `processed/`, and `logs/` (for document intake and tracking).
+
+Runtime paths are resolved from Electron's `userData` directory and are initialized only after the `app.ready` event to ensure testability and predictable behavior.
+
+### Data Storage
+
+All data is stored in plain files under the **user’s local app data directory** (not the install folder):
+
+* `risk_register.csv` – Risk records.
+* `config.json` – Schema and dropdown options.
+* `inbox/`, `processed/` – Documents for AI ingestion.
+
+## Application Architecture
+
+* **Electron** – Desktop container.
+* **Node.js (Main Process)** – Handles file I/O, API calls, and system logic.
+* **Renderer (Frontend)** – HTML/CSS/JS for UI. Communicates via `ipcMain`/`ipcRenderer`.
+* **Preload Layer** – Secure bridge exposing only whitelisted APIs to renderer.
+
+### File Layout
+
+```
+├── main.js         # Electron entry point
+├── preload.js      # Secure API bridge
+├── renderer.js     # Frontend logic
+├── index.html      # Main UI
+├── style.css       # Styling
+├── config.json     # Schema & defaults
+├── risk_register.csv # Risk register data
+└── inbox/processed/logs # Data directories
+```
+
+## Configuration
+
+The schema is driven by `config.json`. Default fields include:
+
+| Field                               | Type     | Options                                                                                                                                                                                                       |
+| ----------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Risk Status                         | dropdown | Draft, Open, Closed                                                                                                                                                                                           |
+| ID                                  | text     | -                                                                                                                                                                                                             |
+| Source                              | text     | -                                                                                                                                                                                                             |
+| RBS                                 | dropdown | Customers/Stakeholders, Business/Government, Management Controls & Systems, Financial, Commercial & Legal, Environment & Sustainability, Safety & Security, Planning, Design, Procurement, Construction, O\&M |
+| Title: Description                  | textarea | -                                                                                                                                                                                                             |
+| Threat / Opportunity                | dropdown | Threat, Opportunity                                                                                                                                                                                           |
+| Causes                              | tags     | -                                                                                                                                                                                                             |
+| Consequences                        | text     | -                                                                                                                                                                                                             |
+| Existing Controls                   | tags     | -                                                                                                                                                                                                             |
+| Control effectiveness               | dropdown | High, Good, Effective, Moderate, Partially Effective, Ineffective                                                                                                                                             |
+| Leading Consequence Category        | dropdown | Cost, Time, Health & Safety, Quality, Environmental, Legal, Social                                                                                                                                            |
+| Other Relevant Consequence Category | dropdown | Cost, Time, Health & Safety, Quality, Environmental, Legal, Social                                                                                                                                            |
+| Max Consequence Level               | text     | -                                                                                                                                                                                                             |
+| Likelihood Level                    | dropdown | Rare (<0.4%), Very Unlikely (0.4%-2%), Unlikely (2%-10%), Possible (10%-50%), Likely (50%-90%), Very Likely (>90%)                                                                                            |
+| Risk Rating                         | text     | -                                                                                                                                                                                                             |
+| Risk Owner                          | text     | -                                                                                                                                                                                                             |
+| Decision                            | dropdown | Within Tolerance, Treat, Transfer                                                                                                                                                                             |
+| Comments                            | textarea | -                                                                                                                                                                                                             |
+| Treatment Actions                   | textarea | -                                                                                                                                                                                                             |
+
+## AI Integration
+
+To use AI-powered risk identification:
+
+1. Go to **AI Document Processor** in the app.
+2. Enter your LLM provider API key (stored securely via OS keychain, not config files).
+3. Drop a document in `inbox/` and click **Process**.
+4. Suggested risks appear in **Suggested Risks**, where you can review/edit before import.
+
+## Testing
+
+The application includes automated tests for the core IPC and path handling logic.
+
+To run the tests:
+```bash
+npm test
+```
+
+Manual testing is also recommended:
+
+1. Run the app → `npm start`.
+2. Test CRUD operations: add, edit, delete risks.
+3. Confirm changes in `risk_register.csv`.
+4. Place a document in `inbox/` and test AI processing.
+5. Check that settings reflect `config.json`.
+
+## Roadmap (Next Steps)
+
+* [ ] Implement secure API key storage (`keytar`).
+* [ ] Improve CSV parsing (switch to `csv-parse` or `papaparse`).
+* [ ] Add form-based **Add/Edit Risk** modal.
+* [ ] Build validation pipeline (Zod/AJV for AI JSON output).
+* [ ] Add risk scoring & heatmap visualization.
+* [ ] Package app with `electron-builder` for distribution.

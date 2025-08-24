@@ -4,7 +4,8 @@
   "description": "An AI-powered desktop application for managing a project risk register.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "vitest"
   },
   "keywords": [
     "risk",
@@ -14,7 +15,13 @@
   ],
   "author": "AI Assistant",
   "license": "UNLICENSED",
+  "dependencies": {
+    "csv-parse": "^5.5.5",
+    "csv-stringify": "^6.4.6",
+    "electron-log": "^4.4.8"
+  },
   "devDependencies": {
-    "electron": "^28.0.0"
+    "electron": "^28.0.0",
+    "vitest": "^1.2.2"
   }
 }
